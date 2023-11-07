@@ -10,6 +10,9 @@ function App() {
 
   let [modalTitle, setModalTitle] = useState(0);
 
+  let [value, setValue] = useState('');
+
+
   const likeBtn = (index) => {
     let copy = [...likes];
     copy[index] = likes[index] + 1;
@@ -23,12 +26,27 @@ function App() {
   const changeTitle = () => {
     let copy = [...titles];
     copy[0] = '여자 코트 추천';
+    
+    copy[1] = '남자 코트 추천';
+
+    
+    copy[2] = ' 코트 추천';
     setTitles(copy);
   }
 
   const sortTitle = () => {
     let copy = [...titles];
     copy.sort();
+    setTitles(copy);
+  }
+  const addTitle = () => {
+    let copy = [...titles];
+    copy.push(value);
+    setTitles(copy);
+  }
+  const deleteTitle = () => {
+    let copy = [...titles];
+    copy.pop(); 
     setTitles(copy);
   }
 
@@ -42,13 +60,22 @@ function App() {
         sortTitle();
       }}>정렬</button>
 
+     
+     
       {titles.map((title, i) => (
         <div className="list" key={i}>
-          <h4 onClick={()=>{controlModal(); setModalTitle(i)}}>{title}</h4>
-          <span onClick={() => likeBtn(i)}>👍</span> {likes[i]}
+          <h4 onClick={()=>{controlModal(); setModalTitle(i)}}>
+            {title}
+          <span onClick={(e) =>{e.stopPropagation(); likeBtn(i)}}>👍</span> {likes[i]}
+          
+          <button onClick={deleteTitle}>삭제</button>
+          </h4>
           <p>2월 17일 발행</p>
         </div>
       ))}
+
+        <input onChange={(e)=>{setValue(e.target.value)}}></input>
+        <button onClick={addTitle}>추가</button>
 
 
   {modal === true ? <Modal modalTitle={modalTitle} changeTitle={changeTitle} titles={titles} /> : null}
@@ -58,6 +85,9 @@ function App() {
   );
        
 }
+
+
+
 
 function Modal(props) {
   return (
